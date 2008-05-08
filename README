@@ -1,0 +1,26 @@
+Cartographer generates painless Google Maps for your Rails application.
+
+def index
+  @spots = Spot.find(:all)
+  @map = Cartographer::Gmap.new("spots")
+  @map.zoom = :bound
+  @map.controls = [ :small, :scale ]
+  @map.debug = true
+  @spots.each do |spot|
+    @map.markers << name =""> "spot_" + spot.id.to_s, :position => [spot.lat, spot.lng], :info_window => spot.description)
+  end
+end
+
+You will need:
+
+A Google Maps API key (put it in config/cartographer-config.yaml)
+Geocoded locations (easily done with Geokit -- http://geokit.rubyforge.org/)
+
+Current Version:
+
+v0.1 08 May 2008
+* Original Rubyforge version with some small edits
+
+History:
+
+Original Rails blog announcement is at http://download.rubyonrails.com/2005/8/30/cartographer-effortless-google-maps-in-rails, but the Rubyforge project page is dead.  So I'm bringing it back.
