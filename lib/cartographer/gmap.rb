@@ -32,7 +32,14 @@ class Cartographer::Gmap
   # +dom_id+:: DOM ID of HTML element that will contain the map.
   # +opts+:: Initializing options for the map, includes :draggable,
   # :type, :controls, :center, :zoom, and :debug
-  def initialize(dom_id, opts = {})
+  #
+  # You can also pass a block to set options, like:
+  #
+  #   Cartographer::Gmap.new('map') do |m|
+  #     m.zoom = 2
+  #     m.debug = false
+  #   end
+  def initialize(dom_id, opts = {}, &block)
     @dom_id = dom_id
 
     @draggable = opts[:draggable]
@@ -48,19 +55,8 @@ class Cartographer::Gmap
     @icons = []
 
     @move_delay = 2000
-  end
 
-  # Yields the map object to a block
-  #
-  #   @map = Cartographer::Gmap.new('map')
-  #   @map.init {|m|
-  #     m.center = [37.4230, -122.0837] # google headquarters
-  #     m.zoom   = 12
-  #     m.debug  = true
-  #   }
-  def init
     yield self if block_given?
-    return self
   end
   
   # Generates the HTML used to display the map. Set
