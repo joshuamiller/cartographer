@@ -22,27 +22,26 @@
 # +overview+:: A small, collapsible overview map, shown in the lower-right
 # +scale+::    Scale of current map/zoom level, shown in the lower-left
 class Cartographer::Gmap
-  #include Reloadable
   
   attr_accessor :dom_id, :draggable, :polylines,:type, :controls,
   :markers, :center, :zoom, :icons, :debug
-
-  @@window_onload = ""
 
   # Create a new <tt>Cartographer::Gmap</tt> object.
   #   Cartographer::Gmap.new('map')
   #
   # +dom_id+:: DOM ID of HTML element that will contain the map.
-  def initialize(dom_id)
+  # +opts+:: Initializing options for the map, includes :draggable,
+  # :type, :controls, :center, :zoom, and :debug
+  def initialize(dom_id, opts = {})
     @dom_id = dom_id
 
-    @draggable = nil
-    @type      = :normal
-    @controls  = [ :zoom ]
-    @center    = [ 45, 0 ]
-    @zoom      = 1
+    @draggable = opts[:draggable]
+    @type      = opts[:type] || :normal
+    @controls  = opts[:controls] || [ :zoom ]
+    @center    = opts[:center]
+    @zoom      = opts[:zoom] || 1
     
-    @debug = false
+    @debug = opts[:debug]
     
     @markers = []
     @polylines = []
@@ -64,16 +63,21 @@ class Cartographer::Gmap
     return self
   end
   
-  # Generates the HTML used to display the map.
-  def to_html(include_onload = true)
-    @window_onload = ""
+  # Generates the HTML used to display the map. Set
+  # :include_onload to false if you don't want the map 
+  # loaded in the window.onload function (for example, if
+  # you're generating it after an Ajax call).
+  #
+  # @map.to_html(:include_onload => true)
+  def to_html(opts = {:include_onload => true})
     @markers.each { |m| m.map = self } # markers need to know their parent
+    @center ||= auto_center
 
     html = []
     # setup the JS header
     html << "<!-- initialize the google map and your markers -->" if @debug
     html << "<script type=\"text/javascript\">\n/* <![CDATA[ */\n"  
-    html << to_js(include_onload)
+    html << to_js(opts[:include_onload])
     html << "/* ]]> */</script> "
     html << "<!-- end of cartographer code -->" if @debug
     return @debug ? html.join("\n") : html.join.gsub(/\s+/, ' ')
@@ -84,7 +88,6 @@ class Cartographer::Gmap
     html = []
     html << "// define the map-holding variable so we can use it from outside the onload event" if @debug
     html << "var #{@dom_id};\n"
-
     html << "// define the marker variables for your map so they can be accessed from outside the onload event" if @debug
     @markers.collect do |m| 
       html << "var #{m.name};"
@@ -110,8 +113,6 @@ if (!GBrowserIsCompatible()) return false;
 
     html << "  // set the default map type" if @debug 
     html << "  #{@dom_id}.setMapType(G_#{@type.to_s.upcase}_MAP);\n"
-    #html << "#{@dom_id}.setCenter(new GLatLng(#{@center[0]}, #{@center[1]}), #{@zoom});"
-
 
     html << "  // define which controls the user can use." if @debug 
    @controls.each do |control|
@@ -175,7 +176,7 @@ else {
   
   # Returns the coordinates of the center of the bounding box that contains all of the map's markers.
   def auto_center
-  	return nil unless @markers
+  	return [45,0] unless @markers
       return @markers.first.position if @markers.length == 1
   	maxlat, minlat, maxlon, minlon = Float::MIN, Float::MAX, Float::MIN, Float::MAX
   	@markers.each do |marker| 
