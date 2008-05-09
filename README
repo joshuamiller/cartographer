@@ -6,11 +6,11 @@ def index
   @spots = Spot.find(:all) # Your Geocoded location model
   @map = Cartographer::Gmap.new("spots", :zoom => :bound, :controls => [:small,:scale], :debug => true)
   @spots.each do |spot|
-    @map.markers << name =""> "spot_" + spot.id.to_s, :position => [spot.lat, spot.lng], :info_window => spot.description)
+    @map.markers << Cartographer::Gmarker.new(:name => "spot_" + spot.id.to_s, :position => [spot.lat, spot.lng], :info_window => spot.description)
   end
 end
 
-In your view:
+In your view
 
   <%= @map.to_html %>
 
