@@ -6,7 +6,8 @@
 # +center+::    An array specifying the center point of the map, as [ +latitude+, +longitude+ ]
 # +zoom+::      Specify the zoom level of the map.  0 is world view, 17 is closest.
 # +debug+::     Set to +true+ to enable debugging output in the Cartographer html (see <tt>#to_html</tt> and <tt>#to_js</tt> for more)
-# 
+# +marker_mgr+  Set to +true+ to use a MarkerManager utility library to manage markers.  Set markers min_zoom, max_zoom attributes to control the display of markers.
+# +current_marker+  Set to variable name of one of the markers to display the marker unfo window on load.
 # ==== Collections
 #
 # +icons+::     A collection of <tt>Cartographer::Gicon</tt> objects to be added to the map.
@@ -24,7 +25,9 @@
 class Cartographer::Gmap
   
   attr_accessor :dom_id, :draggable, :polylines,:type, :controls,
-  :markers, :center, :zoom, :icons, :debug
+  :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker
+  
+  @@window_onload = ""
 
   # Create a new <tt>Cartographer::Gmap</tt> object.
   #   Cartographer::Gmap.new('map')
@@ -56,6 +59,9 @@ class Cartographer::Gmap
 
     @move_delay = 2000
 
+    @marker_mgr = opts[:marker_mgr] || false
+    @current_marker = opts[:current_marker] || nil
+
     yield self if block_given?
   end
   
@@ -86,7 +92,7 @@ class Cartographer::Gmap
     html << "var #{@dom_id};\n"
     html << "// define the marker variables for your map so they can be accessed from outside the onload event" if @debug
     @markers.collect do |m| 
-      html << "var #{m.name};"
+      html << "var #{m.name};" unless m.info_window_url
       html << m.header_js
     end
     
@@ -102,7 +108,7 @@ if (!GBrowserIsCompatible()) return false;
       html << "#{@dom_id}.setCenter(new GLatLng(0,0),0);\n"
       html << "var #{@dom_id}_bounds = new GLatLngBounds(new GLatLng(#{sw_ne[0][0]}, #{sw_ne[0][1]}), new GLatLng(#{sw_ne[1][0]}, #{sw_ne[1][1]}));\n"
       html << "#{@dom_id}.setCenter(#{@dom_id}_bounds.getCenter());\n"
-      html << "#{@dom_id}.setZoom(#{@dom_id}.getBoundsZoomLevel(#{@dom_id}_bounds) - 1);\n"
+      html << "#{@dom_id}.setZoom(#{@dom_id}.getBoundsZoomLevel(#{@dom_id}_bounds));\n"
     else
       html << "#{@dom_id}.setCenter(new GLatLng(#{@center[0]}, #{@center[1]}), #{@zoom});\n"
     end
@@ -121,20 +127,61 @@ if (!GBrowserIsCompatible()) return false;
           "GMapTypeControl"
         when :zoom
           "GSmallZoomControl"
+        when :overview
+          "GOverviewMapControl"
       end + "());"
     end
 
     html << "\n  // create markers from the @markers array" if @debug
-    @markers.each { |m| html << m.to_js }
+    html << "\n setupMarkers();"   
 
-    html << "  // create icons from the @icons array" if @debug
-    @icons.each { |i| html << i.to_js }
+    # trigger marker info window is current_marker is defined
+    (html << "GEvent.trigger(#{@current_marker}, \"click\");\n") unless @current_marker.nil?
 
     html << "  // create polylines from the @polylines array" if @debug
     @polylines.each { |pl| html << pl.to_js }
     
     # ending the gmap_#{name} function
     html << "}\n"
+    
+    html << "function setupMarkers(){"
+    
+    # Render the Icons
+    html << "  // create icons from the @icons array" if @debug
+    @icons.each { |i| html << i.to_js }
+  
+    html << "mgr = new MarkerManager(#{@dom_id});" if @marker_mgr
+    hmarkers = Hash.new 
+    hmarkers_no_zoom =[]
+    @markers.each do |m|
+      if (m.min_zoom.nil?) || (m.min_zoom == '')
+        hmarkers_no_zoom << m
+      else
+        hmarkers[m.min_zoom] = [] unless hmarkers[m.min_zoom]
+        hmarkers[m.min_zoom] << m
+      end
+    end   
+    
+    hmarkers.each do |zoom, markers|
+      html << "var batch#{zoom} = [];"
+      markers.each do |m|
+        html << m.to_js(@marker_mgr)
+        html << "batch#{zoom}.push(#{m.name});"
+      end      
+      html << "mgr.addMarkers(batch#{zoom}, #{zoom});"
+    end
+    
+    if (hmarkers_no_zoom.size > 0)
+      html << "var batch = [];"
+      hmarkers_no_zoom.each do |m|      
+        html << m.to_js(@marker_mgr)
+        html << "batch.push(#{m.name});" if @marker_mgr
+      end
+      html << "mgr.addMarkers(batch, 0);" if @marker_mgr
+    end
+    html << "mgr.refresh();\n" if @marker_mgr
+    html << "}"
+        
     html << "  // Dynamically attach to the window.onload event while still allowing for your existing onload events." if @debug
 
     # todo: allow for onload to happen before, or after, the existing onload events, like :before or :after

@@ -33,6 +33,7 @@ class Cartographer::Header
     # check if our URI is in the keys yml file and show the appropriate script
     if has_key?(@uri)
       html << "<script src='http://maps.google.com/maps?file=api&amp;v=#{version}&amp;key=#{value_for(@uri)}' type='text/javascript'></script>"
+      html << "<script src='http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/1.1/src/markermanager_packed.js' type='text/javascript'></script>"
     else
       html << "<!-- Cartographer Header goes here.  The URI [#{@uri}] couldn't be found in your 
       cartographer-config.yml file.  Please add it and your map initialization code will
