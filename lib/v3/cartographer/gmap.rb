@@ -26,7 +26,9 @@ class Cartographer::Gmap
   
   attr_accessor :dom_id, :draggable, :polylines,:type, :controls,
   :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker
-  
+
+
+
   @@window_onload = ""
 
   # Create a new <tt>Cartographer::Gmap</tt> object.
@@ -48,7 +50,7 @@ class Cartographer::Gmap
     @draggable = opts[:draggable]
     @type      = opts[:type] || :normal
     @controls  = opts[:controls] || [ :zoom ]
-    @center    = opts[:center]
+    @center    = opts[:center] || [0,0]
     @zoom      = opts[:zoom] || 1
     
     @debug = opts[:debug]
@@ -98,19 +100,18 @@ class Cartographer::Gmap
     
     html << "// define the map-initializing function for the onload event" if @debug
     html << "function initialize_gmap_#{@dom_id}() {
-if (!GBrowserIsCompatible()) return false;
-#{@dom_id} = new GMap2(document.getElementById(\"#{@dom_id}\"));"
+#{@dom_id} = new google.maps.Map(document.getElementById(\"#{@dom_id}\"),{center: new google.maps.LatLng(0, 0), zoom: 0, mapTypeId: google.maps.MapTypeId.ROADMAP});"
 
-    html << "  #{@dom_id}.disableDragging();" if @draggable == false
+    html << "  #{@dom_id}.draggable = false;" if @draggable == false
     
     if( @zoom == :bound )
       sw_ne = self.bounding_points
-      html << "#{@dom_id}.setCenter(new GLatLng(0,0),0);\n"
-      html << "var #{@dom_id}_bounds = new GLatLngBounds(new GLatLng(#{sw_ne[0][0]}, #{sw_ne[0][1]}), new GLatLng(#{sw_ne[1][0]}, #{sw_ne[1][1]}));\n"
+      html << "#{@dom_id}.setCenter(new google.maps.LatLng(0,0),0);\n"
+      html << "var #{@dom_id}_bounds = new google.maps.LatLngBounds(new google.maps.LatLng(#{sw_ne[0][0]}, #{sw_ne[0][1]}), new google.maps.LatLng(#{sw_ne[1][0]}, #{sw_ne[1][1]}));\n"
       html << "#{@dom_id}.setCenter(#{@dom_id}_bounds.getCenter());\n"
-      html << "#{@dom_id}.setZoom(#{@dom_id}.getBoundsZoomLevel(#{@dom_id}_bounds));\n"
+      html << "#{@dom_id}.fitBounds(#{@dom_id}_bounds);\n"
     else
-      html << "#{@dom_id}.setCenter(new GLatLng(#{@center[0]}, #{@center[1]}), #{@zoom});\n"
+      html << "#{@dom_id}.setCenter(new google.maps.LatLng(#{@center[0]}, #{@center[1]}));#{@dom_id}.setZoom(#{@zoom});\n"
     end
 
     html << "  // set the default map type" if @debug 
