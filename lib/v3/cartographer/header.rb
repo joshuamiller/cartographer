@@ -32,7 +32,9 @@ class Cartographer::Header
     # initialize the html with the IE polyline VML code
     html = "\n<!--[if IE]>\n<style type=\"text/css\">v\\:* { behavior:url(#default#VML); }</style>\n<![endif]-->"
     html << "<script type=\"text/javascript\" src=\"http://maps.google.com/maps/api/js?sensor=true\"></script>"
-    html << "<script src='http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/1.1/src/markermanager_packed.js' type='text/javascript'></script>"
+    html << "<script src='http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markermanager/src/markermanager_packed.js' type='text/javascript'></script>"
+    html << "<script src='http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer_packed.js' type='text/javascript'></script>"
+       
     return html
   end
 
@@ -41,4 +43,5 @@ class Cartographer::Header
     mh = self.new
     mh.to_s
   end
+
 end

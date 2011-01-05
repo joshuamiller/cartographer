@@ -1,7 +1,7 @@
 # The core of the library.  To display a map, you must first create it.  For details, see <tt>#new</tt>.  Then, you can tweak various parameters of map display, detailed below:
 #
 # +draggable+:: Set to +false+ to disable the user's ability to drag the map around.
-# +type+::      The type of map to display.  Can be set to +normal+ (default), +satellite+, or +hybrid+.
+# +type+::      The type of map to display.  Can be set to +roadmap+ (default), +satellite+, +terrain+ or +hybrid+.
 # +controls+::  Specify which map controls you would like displayed.  See below for more details.
 # +center+::    An array specifying the center point of the map, as [ +latitude+, +longitude+ ]
 # +zoom+::      Specify the zoom level of the map.  0 is world view, 17 is closest.
@@ -25,7 +25,7 @@
 class Cartographer::Gmap
   
   attr_accessor :dom_id, :draggable, :polylines,:type, :controls,
-  :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker
+  :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker, :marker_clusterer
 
 
 
@@ -48,7 +48,7 @@ class Cartographer::Gmap
     @dom_id = dom_id
 
     @draggable = opts[:draggable]
-    @type      = opts[:type] || :normal
+    @type      = opts[:type] || :roadmap
     @controls  = opts[:controls] || [ :zoom ]
     @center    = opts[:center] || [0,0]
     @zoom      = opts[:zoom] || 1
@@ -63,6 +63,7 @@ class Cartographer::Gmap
 
     @marker_mgr = opts[:marker_mgr] || false
     @current_marker = opts[:current_marker] || nil
+    @marker_clusterer = false #by default marker_clustering is disabled
 
     yield self if block_given?
   end
@@ -115,23 +116,8 @@ class Cartographer::Gmap
     end
 
     html << "  // set the default map type" if @debug 
-    html << "  #{@dom_id}.setMapType(G_#{@type.to_s.upcase}_MAP);\n"
+    html << "  #{@dom_id}.setMapTypeId(google.maps.MapTypeId.#{@type.to_s.upcase});\n"
 
-    html << "  // define which controls the user can use." if @debug 
-   @controls.each do |control|
-      html << "  #{@dom_id}.addControl(new " + case control
-        when :large, :small, :overview
-          "G#{control.to_s.capitalize}MapControl"
-        when :scale
-          "GScaleControl"
-        when :type
-          "GMapTypeControl"
-        when :zoom
-          "GSmallZoomControl"
-        when :overview
-          "GOverviewMapControl"
-      end + "());"
-    end
 
     html << "\n  // create markers from the @markers array" if @debug
     html << "\n setupMarkers();"   

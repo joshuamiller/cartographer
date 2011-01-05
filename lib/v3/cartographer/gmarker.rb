@@ -11,7 +11,7 @@ class Cartographer::Gmarker
     @info_window = options[:info_window] # html to pop up on click
     @info_window_url = options[:info_window_url] # html to pop up on click fetched from a URL
     @map = options[:map]
-    
+  
     # inherit our 'debug' settings from the map, if there is one, and it's in debug
     # you can also just debug this marker, if you like, or debug the map and
     # not this marker.
