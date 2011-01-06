@@ -25,7 +25,7 @@
 class Cartographer::Gmap
   
   attr_accessor :dom_id, :draggable, :polylines,:type, :controls,
-  :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker, :marker_clusterer
+  :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker, :marker_clusterer, :shared_info_window
 
 
 
@@ -65,6 +65,8 @@ class Cartographer::Gmap
     @current_marker = opts[:current_marker] || nil
     @marker_clusterer = false #by default marker_clustering is disabled
 
+    @shared_info_window = opts[:shared_info_window] || Cartographer::InfoWindow.new(:name => "default_shared_info_window",:content => '')
+
     yield self if block_given?
   end
   
@@ -98,7 +100,14 @@ class Cartographer::Gmap
       html << "var #{m.name};" unless m.info_window_url
       html << m.header_js
     end
-    
+
+    if @shared_info_window
+      html << "// Emit js for default info window" if @debug
+      html << @shared_info_window.to_js
+    end
+
+    html << cartographer_ajax_fetch_url #This will inject a simple ajax function as replacement for old GDownloadUrl of google api
+
     html << "// define the map-initializing function for the onload event" if @debug
     html << "function initialize_gmap_#{@dom_id}() {
 #{@dom_id} = new google.maps.Map(document.getElementById(\"#{@dom_id}\"),{center: new google.maps.LatLng(0, 0), zoom: 0, mapTypeId: google.maps.MapTypeId.ROADMAP});"
@@ -148,14 +157,14 @@ class Cartographer::Gmap
         hmarkers[m.min_zoom] << m
       end
     end   
-    
+    add_marker_js = ""
     hmarkers.each do |zoom, markers|
       html << "var batch#{zoom} = [];"
       markers.each do |m|
         html << m.to_js(@marker_mgr)
         html << "batch#{zoom}.push(#{m.name});"
       end      
-      html << "mgr.addMarkers(batch#{zoom}, #{zoom});"
+      add_marker_js << "mgr.addMarkers(batch#{zoom}, #{zoom});"
     end
     
     if (hmarkers_no_zoom.size > 0)
@@ -164,9 +173,12 @@ class Cartographer::Gmap
         html << m.to_js(@marker_mgr)
         html << "batch.push(#{m.name});" if @marker_mgr
       end
-      html << "mgr.addMarkers(batch, 0);" if @marker_mgr
+      add_marker_js << "mgr.addMarkers(batch, 0);" if @marker_mgr
     end
-    html << "mgr.refresh();\n" if @marker_mgr
+
+    add_marker_js << "mgr.refresh();\n" if @marker_mgr
+    html << "google.maps.event.addListener(mgr, 'loaded', function(){ #{add_marker_js}});" if @marker_mgr
+
     html << "}"
         
     html << "  // Dynamically attach to the window.onload event while still allowing for your existing onload events." if @debug
@@ -240,4 +252,21 @@ else {
 
   	return [[minlat, minlon], [maxlat, maxlon]]
   end
+  def cartographer_ajax_fetch_url
+    "function cartographer_ajax_fetch_url(url){
+      if (window.XMLHttpRequest)
+      {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+      }
+      else
+      {// code for IE6, IE5
+        xmlhttp=new ActiveXObject(\"Microsoft.XMLHTTP\");
+      }
+      xmlhttp.open(\"GET\",url,false);
+      xmlhttp.send();
+      return xmlhttp.responseText;
+     }
+    "
+  end
+
 end

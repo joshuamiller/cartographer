@@ -43,5 +43,23 @@ describe Cartographer::Gmap do
     }
   end
 
+  it "should have a global shared info window" do
+
+    map = Cartographer::Gmap.new('map',{})
+    map.to_s.should include("var default_shared_info_window = new google.maps.InfoWindow({ content: \"\" });")
+
+    info_win =Cartographer::InfoWindow.new(:name => "custom_name",:content => 'This is a lovely window')
+    map = Cartographer::Gmap.new('map',{:shared_info_window => info_win })
+    map.to_s.should include("custom_name")
+
+  end
+
+  it "should allow marker manager" do
+    map = Cartographer::Gmap.new('map')
+    map.marker_mgr = true
+    map.marker_mgr.should equal(true)
+
+
+  end
 
 end

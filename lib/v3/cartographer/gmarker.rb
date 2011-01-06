@@ -47,30 +47,32 @@ class Cartographer::Gmarker
     end
   end
 
-  def to_js(marker_mgr)
+  def to_js(marker_mgr_flag = false)
+    marker_mgr = marker_mgr_flag 
     script = []
     script << "// Set up the pre-defined marker" if @debug
-    script << "#{@name} = new GMarker(new GLatLng(#{@position[0]}, #{@position[1]}), #{@icon.name});\n"
+    script << "#{@name} = new google.maps.Marker({map: null,position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: true, icon: #{@icon.name}}); \n"
 
     if @click
       script << "// Create the listener for your custom click event" if @debug
-      script << "GEvent.addListener(#{name}, \"click\", function() {#{@click}});\n"
+      script << "google.maps.event.addListener(#{name}, 'click', function() {#{@click}});\n"
     elsif @info_window_url
-      script << "GEvent.addListener(#{name}, \"click\", function() { 
-          GDownloadUrl(\"#{info_window_url}\", function(html) { 
-            #{@name}.openInfoWindowHtml(html); 
-          }); 
+      script << "google.maps.event.addListener(#{name}, \"click\", function() {
+          #{@map.shared_info_window.name}.close();
+          var fetched_content = cartographer_ajax_fetch_url(\"#{info_window_url}\");
+          #{@map.shared_info_window.name}.setContent(fetched_content);
+          #{@map.shared_info_window.name}.open(#{@map.dom_id},#{name});
         });\n"
     else
-      script << "GEvent.addListener(#{name}, \"click\", function() {#{name}_infowindow_function()});\n"
+      script << "google.maps.event.addListener(#{name}, \"click\", function() {#{name}_infowindow_function()});\n"
     end
 
     if @dblclick
-      script << "GEvent.addListener(#{name}, \"dblclick\", function() {#{@dblclick}});\n"
+      script << "google.maps.event.addListener(#{name}, 'dblclick', function() {#{@dblclick}});\n"
     end
 
     script << "  // Add the marker to a new overlay on the map" if @debug
-    script << "  #{@map.dom_id}.addOverlay(#{@name});\n" unless marker_mgr
+    script << "  #{@name}.setMap(#{@map.dom_id});\n" unless marker_mgr
     return @debug? script.join("\n  ") : script.join.gsub(/\s+/, ' ')
   end
 
@@ -82,4 +84,6 @@ class Cartographer::Gmarker
   def zoom_link(link_text = 'Zoom on map')
     "<a href='#' onClick='#{@map.dom_id}.setCenter(new GLatLng(#{@position.first}, #{@position.last}), 8); return false;'>#{link_text}</a>"
   end
+
+
 end
