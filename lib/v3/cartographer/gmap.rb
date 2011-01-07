@@ -25,7 +25,7 @@
 class Cartographer::Gmap
   
   attr_accessor :dom_id, :draggable, :polylines,:type, :controls,
-  :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker, :marker_clusterer, :shared_info_window
+  :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker, :marker_clusterer, :shared_info_window, :marker_clusterer_icons
 
 
 
@@ -66,6 +66,7 @@ class Cartographer::Gmap
     @marker_clusterer = false #by default marker_clustering is disabled
 
     @shared_info_window = opts[:shared_info_window] || Cartographer::InfoWindow.new(:name => "default_shared_info_window",:content => '')
+    @marker_clusterer_icons = opts[:marker_clusterer_icons] || []
 
     yield self if block_given?
   end
@@ -161,7 +162,7 @@ class Cartographer::Gmap
     hmarkers.each do |zoom, markers|
       html << "var batch#{zoom} = [];"
       markers.each do |m|
-        html << m.to_js(@marker_mgr)
+        html << m.to_js(@marker_mgr, @marker_clusterer)
         html << "batch#{zoom}.push(#{m.name});"
       end      
       add_marker_js << "mgr.addMarkers(batch#{zoom}, #{zoom});"
@@ -170,7 +171,7 @@ class Cartographer::Gmap
     if (hmarkers_no_zoom.size > 0)
       html << "var batch = [];"
       hmarkers_no_zoom.each do |m|      
-        html << m.to_js(@marker_mgr)
+        html << m.to_js(@marker_mgr, @marker_clusterer)
         html << "batch.push(#{m.name});" if @marker_mgr
       end
       add_marker_js << "mgr.addMarkers(batch, 0);" if @marker_mgr
@@ -179,7 +180,33 @@ class Cartographer::Gmap
     add_marker_js << "mgr.refresh();\n" if @marker_mgr
     html << "google.maps.event.addListener(mgr, 'loaded', function(){ #{add_marker_js}});" if @marker_mgr
 
-    html << "}"
+    if @marker_clusterer
+      available_cluster_icons = []
+      @marker_clusterer_icons.each {|cluster_icon|
+        html << cluster_icon.to_js
+        available_cluster_icons << cluster_icon.marker_type
+      }
+
+      marker_types = @markers.collect{|marker| marker.marker_type }
+      marker_types.each {|marker_type| html << "var clusterBatch_#{marker_type} = [];"}
+      @markers.each {|m| html <<   "clusterBatch_#{m.marker_type}.push(#{m.name});"}
+
+
+
+      marker_types.sort.each_with_index {|marker_type, index|
+        clustr_opts =[]
+        clustr_opts << "gridSize: 20"
+        clustr_opts << "maxZoom:10 "
+        clustr_opts << "styles: cluster_style_#{marker_type}" if available_cluster_icons.include?(marker_type)
+        html << "var markerCluster_#{marker_type} = new MarkerClusterer(#{@dom_id}, clusterBatch_#{marker_type}, {#{clustr_opts.join(",")}});"
+      }
+    end
+    html << "
+      google.maps.event.addListener(map, \"zoomend\", function(oldzoom,zoom) {
+      google.maps.log.write('Current Zoom:' + zoom);
+    });" if @debug
+
+    html << "}" #End of setup marker method
         
     html << "  // Dynamically attach to the window.onload event while still allowing for your existing onload events." if @debug
 

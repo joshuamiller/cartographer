@@ -25,7 +25,7 @@
 class Cartographer::Gmap
   
   attr_accessor :dom_id, :draggable, :polylines,:type, :controls,
-  :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker
+  :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker,:marker_clusterer
 
 
 

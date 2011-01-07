@@ -6,6 +6,8 @@ if CARTOGRAPHER_GMAP_VERSION == 2 #Support Legacy Cartographer apis
   require 'v2/cartographer'
   require 'v2/cartographer/gmap'
   require 'v2/cartographer/header'
+  require 'v2/cartographer/gicon'
+  require 'v2/cartographer/gmarker'
   require 'v2/geocode'
 
   Cartographer
@@ -26,6 +28,7 @@ if CARTOGRAPHER_GMAP_VERSION == 3
   require 'v3/cartographer/gicon'
   require 'v3/cartographer/gmarker'
   require 'v3/cartographer/infowindow'
+  require 'v3/cartographer/cluster_icon'
 
   Cartographer
   Cartographer::Header

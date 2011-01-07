@@ -61,5 +61,10 @@ describe Cartographer::Gmap do
 
 
   end
+  it "should allow marker clusterer" do
+    map = Cartographer::Gmap.new('map')
+    map.marker_clusterer = true
+    map.marker_clusterer.should equal(true)
+  end
 
 end

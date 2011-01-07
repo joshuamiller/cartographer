@@ -1,9 +1,10 @@
 class Cartographer::Gmarker
   #include Reloadable
-  attr_accessor :name, :icon, :position, :click, :info_window, :info_window_url, :map, :min_zoom, :max_zoom, :dblclick
+  attr_accessor :name, :marker_type, :highlight, :icon, :position, :click, :info_window, :info_window_url, :map, :min_zoom, :max_zoom, :dblclick
 
   def initialize(options = {})
     @name = options[:name] || "marker"
+    @marker_type = options[:marker_type] || nil
     @position = options[:position] || [0, 0]
     @icon = options[:icon] || :normal
     @click = options[:click] # javascript to execute on click
@@ -11,6 +12,7 @@ class Cartographer::Gmarker
     @info_window = options[:info_window] # html to pop up on click
     @info_window_url = options[:info_window_url] # html to pop up on click fetched from a URL
     @map = options[:map]
+    @highlight = options[:highlight] || false
   
     # inherit our 'debug' settings from the map, if there is one, and it's in debug
     # you can also just debug this marker, if you like, or debug the map and
@@ -47,8 +49,9 @@ class Cartographer::Gmarker
     end
   end
 
-  def to_js(marker_mgr_flag = false)
-    marker_mgr = marker_mgr_flag 
+  def to_js(marker_mgr_flag = false, marker_clusterer_flag = false)
+    marker_mgr = marker_mgr_flag
+    marker_clusterer = marker_clusterer_flag
     script = []
     script << "// Set up the pre-defined marker" if @debug
     script << "#{@name} = new google.maps.Marker({map: null,position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: true, icon: #{@icon.name}}); \n"
@@ -72,7 +75,7 @@ class Cartographer::Gmarker
     end
 
     script << "  // Add the marker to a new overlay on the map" if @debug
-    script << "  #{@name}.setMap(#{@map.dom_id});\n" unless marker_mgr
+    script << "  #{@name}.setMap(#{@map.dom_id});\n" if self.highlight || (!marker_mgr && !marker_clusterer)
     return @debug? script.join("\n  ") : script.join.gsub(/\s+/, ' ')
   end
 
