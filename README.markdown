@@ -36,8 +36,8 @@ In your controller...
 In your view...
 <pre><code>
   # for Rails 3+ you need to make use of 'raw'
-  <%= raw Cartographer::Header.new.to_s %>
-  <%= raw @map.to_html %>
+  &lt;%= raw Cartographer::Header.new.to_s %&gt;
+  &lt;%= raw @map.to_html %&gt;
 </code></pre>
 
 Here is another example with custom icons + clustering
