@@ -1,2 +1,9 @@
+v0.2 08 Jan 2011
+* Support for Google Maps v3
+* Drop-in replacement for older version of cartographer (with maps google maps v2)
+* Support for MarkerManager v3
+* Support for MarkerClusterer v3
+* Wel-covered tests
+
 v0.1 08 May 2008
 * Original Rubyforge version with some small edits
