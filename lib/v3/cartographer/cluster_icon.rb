@@ -14,7 +14,7 @@ class Cartographer::ClusterIcon < Array
   end
   # turn the object into valid js
   def to_js
-    "var #{var_name} = [#{self.collect{|i| i.to_json}.join(",")}]"
+    "var #{var_name} = [#{self.collect{|i| i.to_json}.join(",")}];"
   end
 
   def to_html

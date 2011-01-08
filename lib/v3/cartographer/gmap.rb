@@ -282,11 +282,11 @@ else {
   def cartographer_ajax_fetch_url
     "function cartographer_ajax_fetch_url(url){
       if (window.XMLHttpRequest)
-      {// code for IE7+, Firefox, Chrome, Opera, Safari
+      {/* code for IE7+, Firefox, Chrome, Opera, Safari */
         xmlhttp=new XMLHttpRequest();
       }
       else
-      {// code for IE6, IE5
+      {/* code for IE6, IE5 */
         xmlhttp=new ActiveXObject(\"Microsoft.XMLHTTP\");
       }
       xmlhttp.open(\"GET\",url,false);

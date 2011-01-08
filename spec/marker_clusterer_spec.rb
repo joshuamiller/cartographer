@@ -54,9 +54,7 @@ describe "Marker clusterer integration" do
             :opt_textColor => 'black'
           }
 
-    @map.marker_clusterer_icons = [@cluster_icon]
-
-
+  @map.marker_clusterer_icons = [@cluster_icon]
 
   end
 
