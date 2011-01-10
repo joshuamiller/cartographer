@@ -59,7 +59,7 @@ Here is another example with custom icons + clustering
   building_cluster_icon = Cartographer::ClusterIcon.new({:marker_type =&gt; &quot;Building&quot;})
   #Clustering requires various variant of icon for different grouping/zoom level
   #push first variant
-  building_cluster_icon &amp;lt;&amp;lt; {
+  building_cluster_icon &lt;&lt; {
                  :url =&gt; '/images/small_icon.gif',
                  :height =&gt; 33,
                  :width =&gt; 58,
@@ -67,7 +67,7 @@ Here is another example with custom icons + clustering
                  :opt_textColor =&gt; 'black'
                }
   #push second variant
-  building_cluster_icon &amp;lt;&amp;lt; {
+  building_cluster_icon &lt;&lt; {
                  :url =&gt; '/images/bigger_icon.gif',
                  :height =&gt; 63,
                   :width =&gt; 98,
@@ -76,7 +76,7 @@ Here is another example with custom icons + clustering
                }
 
   #push third variant
-  building_cluster_icon &amp;lt;&amp;lt; {
+  building_cluster_icon &lt;&lt; {
                  :url =&gt; '/images/biggest_icon.gif',
                  :height =&gt; 73,
                  :width =&gt; 118,
