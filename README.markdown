@@ -22,15 +22,15 @@ In your controller...
 <pre><code>
   @map = Cartographer::Gmap.new( 'map' )
   @map.zoom = :bound
-  marker1 = Cartographer::Gmarker.new(:name=> "taj_mahal", :marker_type => "Building",
-              :position => [27.173006,78.042086],
-              :info_window_url => "/url_for_info_content")
-  marker2 = Cartographer::Gmarker.new(:name=> "raj_bhawan", :marker_type => "Building",
-              :position => [28.614309,77.201353],
-              :info_window_url => "/url_for_info_content")
+  marker1 = Cartographer::Gmarker.new(:name=&gt; &quot;taj_mahal&quot;, :marker_type =&gt; &quot;Building&quot;,
+              :position =&gt; [27.173006,78.042086],
+              :info_window_url =&gt; &quot;/url_for_info_content&quot;)
+  marker2 = Cartographer::Gmarker.new(:name=&gt; &quot;raj_bhawan&quot;, :marker_type =&gt; &quot;Building&quot;,
+              :position =&gt; [28.614309,77.201353],
+              :info_window_url =&gt; &quot;/url_for_info_content&quot;)
 
-  @map.markers << marker1
-  @map.markers << marker2
+  @map.markers &lt;&lt; marker1
+  @map.markers &lt;&lt; marker2
 </code></pre>
 
 In your view...
@@ -47,57 +47,57 @@ Here is another example with custom icons + clustering
   @map.zoom = :bound
   @map.marker_clusterer = true
 
-  icon_building = Cartographer::Gicon.new(:name => "building_icon",
-          :image_url => '/images/icon.gif',
-          :width => 31,
-          :height => 24,
-          :anchor_x => 0,
-          :anchor_y => 20,
-          :info_anchor_x => 5,
-          :info_anchor_x => 1)
+  icon_building = Cartographer::Gicon.new(:name =&gt; &quot;building_icon&quot;,
+          :image_url =&gt; '/images/icon.gif',
+          :width =&gt; 31,
+          :height =&gt; 24,
+          :anchor_x =&gt; 0,
+          :anchor_y =&gt; 20,
+          :info_anchor_x =&gt; 5,
+          :info_anchor_x =&gt; 1)
 
-  building_cluster_icon = Cartographer::ClusterIcon.new({:marker_type => "Building"})
+  building_cluster_icon = Cartographer::ClusterIcon.new({:marker_type =&gt; &quot;Building&quot;})
   #Clustering requires various variant of icon for different grouping/zoom level
   #push first variant
-  building_cluster_icon << {
-                 :url => '/images/small_icon.gif',
-                 :height => 33,
-                 :width => 58,
-                 :opt_anchor => [10, 0],
-                 :opt_textColor => 'black'
+  building_cluster_icon &amp;lt;&amp;lt; {
+                 :url =&gt; '/images/small_icon.gif',
+                 :height =&gt; 33,
+                 :width =&gt; 58,
+                 :opt_anchor =&gt; [10, 0],
+                 :opt_textColor =&gt; 'black'
                }
   #push second variant
-  building_cluster_icon << {
-                 :url => '/images/bigger_icon.gif',
-                 :height => 63,
-                  :width => 98,
-                 :opt_anchor => [20, 0],
-                 :opt_textColor => 'black'
+  building_cluster_icon &amp;lt;&amp;lt; {
+                 :url =&gt; '/images/bigger_icon.gif',
+                 :height =&gt; 63,
+                  :width =&gt; 98,
+                 :opt_anchor =&gt; [20, 0],
+                 :opt_textColor =&gt; 'black'
                }
 
   #push third variant
-  building_cluster_icon << {
-                 :url => '/images/biggest_icon.gif',
-                 :height => 73,
-                 :width => 118,
-                 :opt_anchor => [26, 0],
-                 :opt_textColor => 'black'
+  building_cluster_icon &amp;lt;&amp;lt; {
+                 :url =&gt; '/images/biggest_icon.gif',
+                 :height =&gt; 73,
+                 :width =&gt; 118,
+                 :opt_anchor =&gt; [26, 0],
+                 :opt_textColor =&gt; 'black'
                }
 
   @map.marker_clusterer_icons = [building_cluster_icon]
 
 
-  marker1 = Cartographer::Gmarker.new(:name=> "taj_mahal", :marker_type => "Building",
-              :position => [27.173006,78.042086],
-              :info_window_url => "/url_for_info_content",
-              :icon => icon_building)
-  marker2 = Cartographer::Gmarker.new(:name=> "raj_bhawan", :marker_type => "Building",
-              :position => [28.614309,77.201353],
-              :info_window_url => "/url_for_info_content",
-              :icon => icon_building)
+  marker1 = Cartographer::Gmarker.new(:name=&gt; &quot;taj_mahal&quot;, :marker_type =&gt; &quot;Building&quot;,
+              :position =&gt; [27.173006,78.042086],
+              :info_window_url =&gt; &quot;/url_for_info_content&quot;,
+              :icon =&gt; icon_building)
+  marker2 = Cartographer::Gmarker.new(:name=&gt; &quot;raj_bhawan&quot;, :marker_type =&gt; &quot;Building&quot;,
+              :position =&gt; [28.614309,77.201353],
+              :info_window_url =&gt; &quot;/url_for_info_content&quot;,
+              :icon =&gt; icon_building)
 
-  @map.markers << marker1
-  @map.markers << marker2
+  @map.markers &lt;&lt; marker1
+  @map.markers &lt;&lt; marker2
 </code></pre>
 
 Install
