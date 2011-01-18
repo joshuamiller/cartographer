@@ -1,6 +1,6 @@
 class Cartographer::Gmarker
   #include Reloadable
-  attr_accessor :name, :marker_type, :highlight, :icon, :position, :click, :info_window, :info_window_url, :map, :min_zoom, :max_zoom, :dblclick
+  attr_accessor :name, :marker_type, :highlight, :icon, :position, :click, :info_window, :info_window_url, :map, :min_zoom, :max_zoom, :dblclick, :draggable
 
   def initialize(options = {})
     @name = options[:name] || "marker"
@@ -13,6 +13,7 @@ class Cartographer::Gmarker
     @info_window_url = options[:info_window_url] # html to pop up on click fetched from a URL
     @map = options[:map]
     @highlight = options[:highlight] || false
+    @draggable = options[:draggable] || false
   
     # inherit our 'debug' settings from the map, if there is one, and it's in debug
     # you can also just debug this marker, if you like, or debug the map and
@@ -54,7 +55,7 @@ class Cartographer::Gmarker
     marker_clusterer = marker_clusterer_flag
     script = []
     script << "// Set up the pre-defined marker" if @debug
-    script << "#{@name} = new google.maps.Marker({map: null,position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: true, icon: #{@icon.name}}); \n"
+    script << "#{@name} = new google.maps.Marker({map: null,position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: #{@draggable}, icon: #{@icon.name}}); \n"
 
     if @click
       script << "// Create the listener for your custom click event" if @debug

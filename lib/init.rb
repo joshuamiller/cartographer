@@ -29,6 +29,7 @@ if CARTOGRAPHER_GMAP_VERSION == 3
   require 'v3/cartographer/gmarker'
   require 'v3/cartographer/infowindow'
   require 'v3/cartographer/cluster_icon'
+  require 'v3/cartographer/gpolyline'
 
   Cartographer
   Cartographer::Header

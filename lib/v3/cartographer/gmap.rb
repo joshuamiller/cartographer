@@ -188,7 +188,7 @@ class Cartographer::Gmap
       }
 
       marker_types = @markers.collect{|marker| marker.marker_type }
-      marker_types = marker_types.uniq!
+      marker_types = marker_types.uniq
       marker_types.each {|marker_type| html << "var clusterBatch_#{marker_type} = [];"}
       @markers.each {|m| html <<   "clusterBatch_#{m.marker_type}.push(#{m.name});"}
 

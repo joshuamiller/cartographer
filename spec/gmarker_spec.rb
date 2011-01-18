@@ -28,7 +28,7 @@ describe Cartographer::Gmarker do
               :info_window_url => "/some_url",
               :icon => @icon,
               :map=>@map)
-    marker.to_js(false).should include("org11 = new google.maps.Marker({map: null,position: new google.maps.LatLng(36.031332, -21.09375), draggable: true, icon: icon_name});")
+    marker.to_js(false).should include("org11 = new google.maps.Marker({map: null,position: new google.maps.LatLng(36.031332, -21.09375), draggable: false, icon: icon_name});")
 
 
     marker.to_js(true).should include("org11 = new google.maps.Marker")
