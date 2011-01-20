@@ -101,7 +101,7 @@ Here is another example with custom icons + clustering
 </code></pre>
 
 ### Sample app
-   If you quickest way to get started, you can download a sample app here https://github.com/downloads/parolkar/cartographer/carto_test.tgz
+   If you want a quickest way to get started, you can download a sample app here https://github.com/downloads/parolkar/cartographer/carto_test.tgz
    Its a rails 3 app, run the server and point your browser to http://localhost:3000/welcome/index
 
 
