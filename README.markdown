@@ -13,7 +13,7 @@ Cartographer
 
 ### How to use?
 
-if you want to use google maps v3, set this constant in first line of environment.rb (this constant should be set before the plugin is loaded)
+if you want to use google maps v3, set this constant as first line of environment.rb (this constant should be set before the plugins are loaded, its best to keep on first line)
 <pre><code>
  CARTOGRAPHER_GMAP_VERSION = 3
 </code></pre>
@@ -99,6 +99,11 @@ Here is another example with custom icons + clustering
   @map.markers &lt;&lt; marker1
   @map.markers &lt;&lt; marker2
 </code></pre>
+
+### Sample app
+   If you quickest way to get started, you can download a sample app here https://github.com/downloads/parolkar/cartographer/carto_test.tgz
+   Its a rails 3 app, run the server and point your browser to http://localhost:3000/welcome/index
+
 
 Install
 -------
