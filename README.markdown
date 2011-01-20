@@ -110,6 +110,8 @@ Install
 
 History:
 
+Announcement of Cartographer's new avatar on Ruby5 Podcast : <a href="http://bit.ly/fSWCfh">http://bit.ly/fSWCfh</a>
+
 Original Rails blog announcement of 2005 is at http://download.rubyonrails.com/2005/8/30/cartographer-effortless-google-maps-in-rails
 
 Copyright (c) 2011 Abhishek Parolkar & Joshua Miller, released under the MIT license
