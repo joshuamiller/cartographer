@@ -133,7 +133,7 @@ class Cartographer::Gmap
     html << "\n setupMarkers();"   
 
     # trigger marker info window is current_marker is defined
-    (html << "GEvent.trigger(#{@current_marker}, \"click\");\n") unless @current_marker.nil?
+    (html << "google.maps.event.trigger(#{@current_marker}, \"click\");\n") unless @current_marker.nil?
 
     html << "  // create polylines from the @polylines array" if @debug
     @polylines.each { |pl| html << pl.to_js }
