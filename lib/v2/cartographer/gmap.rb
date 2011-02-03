@@ -25,7 +25,7 @@
 class Cartographer::Gmap
   
   attr_accessor :dom_id, :draggable, :polylines,:type, :controls,
-  :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker,:marker_clusterer
+  :markers, :center, :zoom, :scroll, :icons, :debug, :marker_mgr, :current_marker,:marker_clusterer
 
 
 
@@ -52,6 +52,7 @@ class Cartographer::Gmap
     @controls  = opts[:controls] || [ :zoom ]
     @center    = opts[:center]
     @zoom      = opts[:zoom] || 1
+    @scroll    = opts[:scroll] || false
     
     @debug = opts[:debug]
     
@@ -114,7 +115,13 @@ if (!GBrowserIsCompatible()) return false;
     else
       html << "#{@dom_id}.setCenter(new GLatLng(#{@center[0]}, #{@center[1]}), #{@zoom});\n"
     end
-
+    
+    if @scroll
+      html << "  #{@dom_id}.enableScrollWheelZoom();\n"
+    else
+      html << "  #{@dom_id}.disableScrollWheelZoom();\n"
+    end
+    
     html << "  // set the default map type" if @debug 
     html << "  #{@dom_id}.setMapType(G_#{@type.to_s.upcase}_MAP);\n"
 
