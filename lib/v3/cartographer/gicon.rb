@@ -14,7 +14,7 @@ class Cartographer::Gicon
     @height	      = options[:height]	|| 34
     @shadow_width   = options[:shadow_width]  || 37 #to be deprecated
     @shadow_height  = options[:shadow_height] || 34 #to be deprecated
-    @anchor_x	      = options[:anchor_x]	|| 20
+    @anchor_x	      = options[:anchor_x]	|| 10
     @anchor_y	      = options[:anchor_y]	|| 34
     @info_anchor_x  = options[:anchor_x]	|| 5 #to be deprecated
     @info_anchor_y  = options[:anchor_y]	|| 1 #to be deprecated
