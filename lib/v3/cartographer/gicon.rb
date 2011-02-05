@@ -22,12 +22,17 @@ class Cartographer::Gicon
 
   # turn the object into valid js
   def to_js
-    "var #{@name}		= new google.maps.MarkerImage(
+    "var #{@name}	= new google.maps.MarkerImage(
       \"#{@image_url}\",
       google.maps.Size(#{@width},#{@height}),
       google.maps.Point(0,0),
-      google.maps.Point(#{@anchor_x},#{@anchor_y}),
-      google.maps.Size(#{@width},#{@height})
+      google.maps.Point(#{@anchor_x},#{@anchor_y})
+    );
+    var #{@name}_shadow	= new google.maps.MarkerImage(
+      \"#{@shadow_url}\",
+      google.maps.Size(#{@shadow_width},#{@shadow_height}),
+      google.maps.Point(0,0),
+      google.maps.Point(#{@anchor_x},#{@anchor_y})
     );
     "
 

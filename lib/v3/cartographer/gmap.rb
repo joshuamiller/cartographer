@@ -25,7 +25,8 @@
 class Cartographer::Gmap
   
   attr_accessor :dom_id, :draggable, :polylines,:type, :controls,
-  :markers, :center, :zoom, :scroll, :icons, :debug, :marker_mgr, :current_marker, :marker_clusterer, :shared_info_window, :marker_clusterer_icons
+  :markers, :center, :zoom, :scroll, :icons, :debug, :marker_mgr, :current_marker, :marker_clusterer, :shared_info_window, :marker_clusterer_icons,
+  :type
 
 
 
@@ -53,6 +54,7 @@ class Cartographer::Gmap
     @center    = opts[:center] || [0,0]
     @zoom      = opts[:zoom] || 1
     @scroll    = opts[:scroll] || true
+    @type      = opts[:type] || "ROADMAP"
     
     @debug = opts[:debug]
     
@@ -112,7 +114,7 @@ class Cartographer::Gmap
 
     html << "// define the map-initializing function for the onload event" if @debug
     html << "function initialize_gmap_#{@dom_id}() {
-#{@dom_id} = new google.maps.Map(document.getElementById(\"#{@dom_id}\"),{center: new google.maps.LatLng(0, 0), zoom: 0, scrollWheel: #{@scroll}, mapTypeId: google.maps.MapTypeId.ROADMAP});"
+#{@dom_id} = new google.maps.Map(document.getElementById(\"#{@dom_id}\"),{center: new google.maps.LatLng(0, 0), zoom: 0, scrollWheel: #{@scroll}, mapTypeId: google.maps.MapTypeId.#{@type}});"
 
     html << "  #{@dom_id}.draggable = false;" if @draggable == false
     
