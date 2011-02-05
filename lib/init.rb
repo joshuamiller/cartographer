@@ -1,6 +1,4 @@
-
-
-CARTOGRAPHER_GMAP_VERSION = 3 if !defined?(CARTOGRAPHER_GMAP_VERSION) # By default we make cartographer to use Google maps v2 for backward compatibility
+CARTOGRAPHER_GMAP_VERSION = 2 if !defined?(CARTOGRAPHER_GMAP_VERSION) # By default we make cartographer to use Google maps v2 for backward compatibility
 
 if CARTOGRAPHER_GMAP_VERSION == 2 #Support Legacy Cartographer apis
   require 'v2/cartographer'
