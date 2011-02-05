@@ -14,8 +14,8 @@ class Cartographer::Gicon
     @height	      = options[:height]	|| 34
     @shadow_width   = options[:shadow_width]  || 37 #to be deprecated
     @shadow_height  = options[:shadow_height] || 34 #to be deprecated
-    @anchor_x	      = options[:anchor_x]	|| 6
-    @anchor_y	      = options[:anchor_y]	|| 20
+    @anchor_x	      = options[:anchor_x]	|| 0
+    @anchor_y	      = options[:anchor_y]	|| 34
     @info_anchor_x  = options[:anchor_x]	|| 5 #to be deprecated
     @info_anchor_y  = options[:anchor_y]	|| 1 #to be deprecated
   end	
@@ -24,15 +24,15 @@ class Cartographer::Gicon
   def to_js
     "var #{@name}	= new google.maps.MarkerImage(
       \"#{@image_url}\",
-      google.maps.Size(#{@width},#{@height}),
-      google.maps.Point(0,0),
-      google.maps.Point(#{@anchor_x},#{@anchor_y})
+      new google.maps.Size(#{@width},#{@height}),
+      new google.maps.Point(0,0),
+      new google.maps.Point(#{@anchor_x},#{@anchor_y})
     );
     var #{@name}_shadow	= new google.maps.MarkerImage(
       \"#{@shadow_url}\",
-      google.maps.Size(#{@shadow_width},#{@shadow_height}),
-      google.maps.Point(0,0),
-      google.maps.Point(#{@anchor_x},#{@anchor_y})
+      new google.maps.Size(#{@shadow_width},#{@shadow_height}),
+      new google.maps.Point(0,0),
+      new google.maps.Point(#{@anchor_x},#{@anchor_y})
     );
     "
 

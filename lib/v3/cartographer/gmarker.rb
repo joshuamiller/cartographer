@@ -6,7 +6,7 @@ class Cartographer::Gmarker
     @name = options[:name] || "marker"
     @marker_type = options[:marker_type] || nil
     @position = options[:position] || [0, 0]
-    @icon = options[:icon] || :normal
+    @icon = options[:icon] || Cartographer::Gicon.new
     @click = options[:click] # javascript to execute on click
     @dblclick = options[:dblclick] # javascript to execute on double click
     @info_window = options[:info_window] # html to pop up on click
@@ -55,7 +55,7 @@ class Cartographer::Gmarker
     marker_clusterer = marker_clusterer_flag
     script = []
     script << "// Set up the pre-defined marker" if @debug
-    script << "#{@name} = new google.maps.Marker({map: null,position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: #{@draggable}, icon: #{@icon.name}}); \n"
+    script << "#{@name} = new google.maps.Marker({map: null, position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: #{@draggable}, icon: #{@icon.name}, shadow: #{@icon.name}_shadow}); \n"
 
     if @click
       script << "// Create the listener for your custom click event" if @debug
