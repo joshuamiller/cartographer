@@ -105,9 +105,9 @@ Here is another example with custom icons + clustering
 Adsense for Maps
 ----------------
 
-To use [Google AdSense for Maps](http://code.google.com/apis/maps/documentation/javascript/advertising.html) with Cartographer you need to define a, ad object in <tt>Cartographer::Gad</tt>.
+To use [Google AdSense for Maps](http://code.google.com/apis/maps/documentation/javascript/advertising.html) with Cartographer you need to define an ad object in <tt>Cartographer::Gad</tt>.
 
-For example, for a map defined as <tt>@map</tt>, in your controller:
+For example, for a map defined as <tt>@map</tt> in your controller, you would use:
 <pre><code>
   @map.ad = Cartographer::Gad.new(
     :format       => "SKYSCRAPER",
