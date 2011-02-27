@@ -39,6 +39,7 @@ In your view...
   # for Rails 3+ you need to make use of 'raw'
   &lt;%= raw Cartographer::Header.new.to_s %&gt;
   &lt;%= raw @map.to_html %&gt;
+  &lt;div style=&quot;width:600px;height:400px;&quot; id=&quot;map&quot; &gt; [Map] &lt;/div&gt;
 </code></pre>
 
 Here is another example with custom icons + clustering
@@ -105,7 +106,7 @@ Install
 -------
 <pre><code>
   cd rails_app
-  git clone git://github.com/parolkar/cartographer.git vendor/plugins/cartographer
+  git clone git://github.com/joshuamiller/cartographer.git vendor/plugins/cartographer
 </code></pre>
 
 
