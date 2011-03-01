@@ -13,7 +13,7 @@ describe Cartographer::Gmap do
 
   it "should initialise the map with no parameter" do
     map = Cartographer::Gmap.new('map')
-    map.to_s.should include("map = new google.maps.Map(document.getElementById(\"map\"),{center: new google.maps.LatLng(0, 0), zoom: 0, mapTypeId: google.maps.MapTypeId.ROADMAP});")
+    map.to_s.should include("map = new google.maps.Map(document.getElementById(\"map\"),{center: new google.maps.LatLng(0, 0), zoom: 0, scrollWheel: true, mapTypeId: google.maps.MapTypeId.ROADMAP});")
   end
 
   it "should initialise the map with option for disabling dragging" do

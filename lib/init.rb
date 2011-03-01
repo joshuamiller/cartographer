@@ -23,6 +23,7 @@ if CARTOGRAPHER_GMAP_VERSION == 3
   require 'v3/cartographer'
   require 'v3/cartographer/header'
   require 'v3/cartographer/gmap'
+  require 'v3/cartographer/gad'
   require 'v3/cartographer/gicon'
   require 'v3/cartographer/gmarker'
   require 'v3/cartographer/infowindow'

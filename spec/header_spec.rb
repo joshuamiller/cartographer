@@ -16,11 +16,10 @@ describe Cartographer::Header do
    end
 
   it "should emit header for google maps three api" do
-        Cartographer::Header.new.to_s.should include("<script type=\"text/javascript\" src=\"http://maps.google.com/maps/api/js?sensor=true\"></script>")
-      Cartographer::Header.header_for({},3).should include("<script type=\"text/javascript\" src=\"http://maps.google.com/maps/api/js?sensor=true\"></script>")
+        Cartographer::Header.new.to_s.should include("<script type=\"text/javascript\" src=\"http://maps.google.com/maps/api/js?sensor=true&libraries=adsense\"></script>")
+      Cartographer::Header.header_for({},3).should include("<script type=\"text/javascript\" src=\"http://maps.google.com/maps/api/js?sensor=true&libraries=adsense\"></script>")
   end
 
   
 
 end
-

@@ -8,6 +8,7 @@ Cartographer
 * Drop-in-replacement for older version of cartographer (which only worked with google maps v2)
 * Support for MarkerManager v3
 * Support for MarkerClusterer v3
+* Support for AdSense for Maps (v3 only)
 * You can easily define custom icons for cluster
 * Works with Rails 3+ and also works on older rails versions to provide backward compatibility
 
@@ -101,6 +102,27 @@ Here is another example with custom icons + clustering
   @map.markers &lt;&lt; marker1
   @map.markers &lt;&lt; marker2
 </code></pre>
+
+Adsense for Maps
+----------------
+
+To use [Google AdSense for Maps](http://code.google.com/apis/maps/documentation/javascript/advertising.html) with Cartographer you need to define an ad object in <tt>Cartographer::Gad</tt>.
+
+For example, for a map defined as <tt>@map</tt> in your controller, you would use:
+<pre><code>
+  @map.ad = Cartographer::Gad.new(
+    :format       => "SKYSCRAPER",
+    :div          => "div",
+    :position     => "RIGHT_TOP",
+    :map          => "map",
+    :visible      => true,
+    :publisher_id => "YOUR_PUBLISHER_ID"
+  )
+</code></pre>
+
+* Make sure you replace <tt>"YOUR_PUBLISHER_ID"</tt> with your AdSense publisher ID.
+* The different formats that the ad can be are [defined here](http://code.google.com/apis/maps/documentation/javascript/advertising.html#AdUnitFormats).
+* The different positions the ad can be placed on the map are [defined here](http://code.google.com/apis/maps/documentation/javascript/controls.html#ControlPositioning).
 
 Install
 -------
