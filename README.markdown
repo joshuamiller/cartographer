@@ -22,7 +22,7 @@ In your controller...
 <pre><code>
   @map = Cartographer::Gmap.new( 'map' )
   @map.zoom = :bound
-  @map.icons << Cartographer::Gicon.new
+  @map.icons &lt;&lt; Cartographer::Gicon.new
   marker1 = Cartographer::Gmarker.new(:name=&gt; &quot;taj_mahal&quot;, :marker_type =&gt; &quot;Building&quot;,
               :position =&gt; [27.173006,78.042086],
               :info_window_url =&gt; &quot;/url_for_info_content&quot;)
