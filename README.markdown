@@ -39,6 +39,7 @@ In your view...
   # for Rails 3+ you need to make use of 'raw'
   &lt;%= raw Cartographer::Header.new.to_s %&gt;
   &lt;%= raw @map.to_html %&gt;
+  &lt;div style=&quot;width:600px;height:400px;&quot; id=&quot;map&quot; &gt; [Map] &lt;/div&gt;
 </code></pre>
 
 Here is another example with custom icons + clustering
@@ -103,9 +104,16 @@ Here is another example with custom icons + clustering
 
 Install
 -------
+
+You can install either with the rails plugin command or by git submoduling it into your vendor/plugins directory.  Note that with the latter, your deploy process needs to initialize and update git submodules; this is not the case by default on Heroku.
+
 <pre><code>
   cd rails_app
-  git clone git://github.com/parolkar/cartographer.git vendor/plugins/cartographer
+  rails plugin install git://github.com/joshuamiller/cartographer.git
+</code></pre>
+or
+<pre><code>
+  git clone git://github.com/joshuamiller/cartographer.git vendor/plugins/cartographer
 </code></pre>
 
 
