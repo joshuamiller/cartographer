@@ -103,6 +103,41 @@ Here is another example with custom icons + clustering
   @map.markers &lt;&lt; marker2
 </code></pre>
 
+Here is an example of handling a marker being dropped.
+
+In your controller...
+<pre><code>
+  @map = Cartographer::Gmap.new( 'map' )
+  @map.zoom = :bound
+  @map.icons &lt;&lt; Cartographer::Gicon.new
+  marker1 = Cartographer::Gmarker.new(:name=&gt; &quot;taj_mahal&quot;, :marker_type =&gt; &quot;Building&quot;,
+              :position =&gt; [27.173006,78.042086],
+              :draggable =&gt; true,                                   # make it draggable
+              :drag_end =&gt; 'handleMarkerDrop(mouseEvent.latLng);',  # javascript code to handle the event.
+              :info_window_url =&gt; &quot;/url_for_info_content&quot;)
+  marker2 = Cartographer::Gmarker.new(:name=&gt; &quot;raj_bhawan&quot;, :marker_type =&gt; &quot;Building&quot;,
+              :position =&gt; [28.614309,77.201353],
+              :info_window_url =&gt; &quot;/url_for_info_content&quot;)
+
+  @map.markers &lt;&lt; marker1
+  @map.markers &lt;&lt; marker2
+</code></pre>
+
+In your view...
+<pre><code>
+  # for Rails 3+ you need to make use of 'raw'
+  &lt;%= raw Cartographer::Header.new.to_s %&gt;
+  &lt;%= raw @map.to_html %&gt;
+  &lt;div style=&quot;width:600px;height:400px;&quot; id=&quot;map&quot; &gt; [Map] &lt;/div&gt;
+
+  &lt;script type="text/javascript"&gt;
+    function handleMarkerDrop(latLng){
+      alert('You moved marker to LAT: '+latLng.lat()+' and LNG: '+latLng.lng()+'!');
+    }
+  &lt;/script&gt;
+</code></pre>
+
+
 Adsense for Maps
 ----------------
 

@@ -77,7 +77,7 @@ class Cartographer::Gmarker
     end
 
     if @drag_end
-      script << "google.maps.event.addListener(#{name}, 'dragend', function() {#{@drag_end}});\n"
+      script << "google.maps.event.addListener(#{name}, 'dragend', function(mouseEvent) {#{@drag_end}});\n"
     end
 
     script << "  // Add the marker to a new overlay on the map" if @debug

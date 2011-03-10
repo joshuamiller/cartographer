@@ -52,7 +52,7 @@ describe Cartographer::Gmarker do
               :drag_end => "alert(\"DragEnd Works!\");",
               :icon => @icon,
               :map=>@map)
-    marker.to_js().should include("google.maps.event.addListener(org11, 'dragend', function() {alert(\"DragEnd Works!\");});")
+    marker.to_js().should include("google.maps.event.addListener(org11, 'dragend', function(mouseEvent) {alert(\"DragEnd Works!\");});")
 
   end
 
