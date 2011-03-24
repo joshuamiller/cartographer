@@ -20,17 +20,20 @@ if you want to use google maps v3, set this constant as first line of environmen
 
 In your controller...
 <pre><code>
-  @map = Cartographer::Gmap.new( 'map' )
-  @map.zoom = :bound
-  marker1 = Cartographer::Gmarker.new(:name=&gt; &quot;taj_mahal&quot;, :marker_type =&gt; &quot;Building&quot;,
-              :position =&gt; [27.173006,78.042086],
-              :info_window_url =&gt; &quot;/url_for_info_content&quot;)
-  marker2 = Cartographer::Gmarker.new(:name=&gt; &quot;raj_bhawan&quot;, :marker_type =&gt; &quot;Building&quot;,
-              :position =&gt; [28.614309,77.201353],
-              :info_window_url =&gt; &quot;/url_for_info_content&quot;)
+@map = Cartographer::Gmap.new( 'map' )
+@map.zoom = :bound
+@icon = Cartographer::Gicon.new()
+@map.icons &lt;&lt;  @icon
+marker1 = Cartographer::Gmarker.new(:name=&gt; &quot;taj_mahal&quot;, :marker_type =&gt; &quot;Building&quot;,
+           :position =&gt; [27.173006,78.042086],
+           :info_window_url =&gt; &quot;/url_for_info_content&quot;, :icon =&gt; @icon)
+marker2 = Cartographer::Gmarker.new(:name=&gt; &quot;raj_bhawan&quot;, :marker_type =&gt; &quot;Building&quot;,
+           :position =&gt; [28.614309,77.201353],
+           :info_window_url =&gt; &quot;/url_for_info_content&quot;, :icon =&gt; @icon)
 
-  @map.markers &lt;&lt; marker1
-  @map.markers &lt;&lt; marker2
+@map.markers &lt;&lt; marker1
+@map.markers &lt;&lt; marker2
+
 </code></pre>
 
 In your view...
