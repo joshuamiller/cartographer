@@ -1,2 +1,3 @@
 .bundler/
 Gemfile.lock
+.rvmrc
