@@ -124,6 +124,28 @@ For example, for a map defined as <tt>@map</tt> in your controller, you would us
 * The different formats that the ad can be are [defined here](http://code.google.com/apis/maps/documentation/javascript/advertising.html#AdUnitFormats).
 * The different positions the ad can be placed on the map are [defined here](http://code.google.com/apis/maps/documentation/javascript/controls.html#ControlPositioning).
 
+Labels for Markers
+==================
+
+There is a simple support added for the MarkerWithLabel utility class. <tt>Cartographer::Gmaker</tt> accepts a <tt>label</tt> parameter. In case when <tt>label</tt> is used, the <tt>MarkerWithLabel</tt> class is used for marker instead of the <tt>google.maps.Marker</tt> class.
+
+Example:
+
+<pre><code>
+  marker = Cartographer::Gmarker.new(
+    :name=> "marker_1", :marker_type => "Building",
+    :position => [location.latitude,location.longitude],
+    :icon => @icon,
+    :label => {
+      :content => 'Marker Label',
+      :class => "marker_label",
+      :anchor => 'new google.maps.Point(22, 0)'
+    }
+  )
+</code></pre>
+
+When markers with label are used, the <tt>markerwithlabel</tt> utility library has to be loaded.
+
 Install
 -------
 
