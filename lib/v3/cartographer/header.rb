@@ -34,7 +34,7 @@ class Cartographer::Header
     html << "<script type=\"text/javascript\" src=\"http://maps.google.com/maps/api/js?sensor=true&libraries=adsense\"></script>"
     html << "<script src='http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markermanager/src/markermanager_packed.js' type='text/javascript'></script>"
     html << "<script src='http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer_packed.js' type='text/javascript'></script>"
-       
+    html << "<script src='http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerwithlabel/src/markerwithlabel_packed.js' type='text/javascript'></script>"   
     return html
   end
 
