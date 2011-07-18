@@ -48,7 +48,7 @@ class Cartographer::Gmarker
     else        
       # using API V3 of infowindow (PG)
       script << "var #{@name}_infowindow = new google.maps.InfoWindow({
-          content: \"#{@info_window}\"
+          content: \"#{escape_javascript(@info_window)}\"
       });"
 
       script << "function #{@name}_infowindow_function(){
@@ -107,6 +107,10 @@ class Cartographer::Gmarker
   def zoom_link(link_text = 'Zoom on map')
     "<a href='#' onClick='#{@map.dom_id}.setCenter(new GLatLng(#{@position.first}, #{@position.last}), 8); return false;'>#{link_text}</a>"
   end
-
+  
+  #Escape string to be used in JavaScript. Lifted from rails.
+  def escape_javascript(javascript)
+    javascript.gsub(/\r\n|\n|\r/, "\\n").gsub("\"") { |m| "\\#{m}" }
+  end
 
 end
