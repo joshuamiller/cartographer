@@ -36,6 +36,7 @@ class Cartographer::Gmarker
     script = []
     return if @info_window_url
     if @info_window.kind_of?Array
+      # this probably won't work with API v3 since it does not support tabs.
       script << "  var #{@name}_infoTabs = ["
       script << @info_window.inject([]) { |tabs,tab|
         tabs << "   new GInfoWindowTab(\"#{tab[:title]}\",\"#{tab[:html]}\")"
@@ -45,9 +46,14 @@ class Cartographer::Gmarker
   #{@name}.openInfoWindowTabsHtml(#{@name}_infoTabs);
 }\n"
     else        
+      # using API V3 of infowindow (PG)
+      script << "var #{@name}_infowindow = new google.maps.InfoWindow({
+          content: \"#{@info_window}\"
+      });"
+
       script << "function #{@name}_infowindow_function(){
-  #{@name}.openInfoWindowHtml(\"#{@info_window}\")
-}\n"
+        #{@name}_infowindow.open(#{@map.dom_id},#{@name});
+      }\n"
     end
   end
 
