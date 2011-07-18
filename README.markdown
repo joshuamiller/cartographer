@@ -44,7 +44,7 @@ In your view...
   
   # in the &lt;body&gt;&lt;/body&gt;:
   &lt;%= raw @map.to_html %&gt;
-  &lt;div style=&quot;width:600px;height:400px;&quot; id=&quot;<%= @map.dom_id %>&quot; &gt; [Map] &lt;/div&gt;
+  &lt;div style=&quot;width:600px;height:400px;&quot; id=&quot;&lt;%= @map.dom_id %&gt;&quot; &gt; [Map] &lt;/div&gt;
 </code></pre>
 
 If your website is served on https, you'll need to switch on SSL in the header (API v3 only):
