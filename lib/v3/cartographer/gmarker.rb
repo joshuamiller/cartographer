@@ -71,9 +71,9 @@ class Cartographer::Gmarker
           label_options << "label#{key.to_s.capitalize}:'#{value.to_s}'"
         end
       end
-      script << "#{@name} = new MarkerWithLabel({map: null, position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: #{@draggable}, icon: #{@icon.name}, shadow: #{@icon.name}_shadow,#{label_options.join(',')}});\n"
+      script << "#{@name} = new MarkerWithLabel({map: null, position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: #{@draggable}, icon: #{@icon.name}, #{@icon.flat ? 'flat: true' : "shadow: #{@icon.name}_shadow"},#{label_options.join(',')}});\n"
     else
-      script << "#{@name} = new google.maps.Marker({map: null, position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: #{@draggable}, icon: #{@icon.name}, shadow: #{@icon.name}_shadow}); \n"
+      script << "#{@name} = new google.maps.Marker({map: null, position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: #{@draggable}, icon: #{@icon.name}, #{@icon.flat ? 'flat: true' : "shadow: #{@icon.name}_shadow"}}); \n"
     end
 
     if @click
