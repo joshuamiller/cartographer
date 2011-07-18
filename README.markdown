@@ -38,9 +38,18 @@ In your controller...
 In your view...
 <pre><code>
   # for Rails 3+ you need to make use of 'raw'
+  
+  # in the &lt;head&gt;&lt;/head&gt; tags:
   &lt;%= raw Cartographer::Header.new.to_s %&gt;
+  
+  # in the &lt;body&gt;&lt;/body&gt;:
   &lt;%= raw @map.to_html %&gt;
-  &lt;div style=&quot;width:600px;height:400px;&quot; id=&quot;map&quot; &gt; [Map] &lt;/div&gt;
+  &lt;div style=&quot;width:600px;height:400px;&quot; id=&quot;<%= @map.dom_id %>&quot; &gt; [Map] &lt;/div&gt;
+</code></pre>
+
+If your website is served on https, you'll need to switch on SSL in the header (API v3 only):
+<pre><code>
+  &lt;%= raw Cartographer::Header.new(:ssl=>true).to_s %&gt;
 </code></pre>
 
 Here is another example with custom icons + clustering
