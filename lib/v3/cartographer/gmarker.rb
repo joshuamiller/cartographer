@@ -60,9 +60,9 @@ class Cartographer::Gmarker
       label_options = []
       @label.each do |key, value|
         if :anchor == key
-          label_options << "label#{key.to_s.capitalize}:#{value.to_s}"
+          label_options << "label#{key.to_s.capitalize}:#{escape_js_string(value.to_s)}"
         else
-          label_options << "label#{key.to_s.capitalize}:'#{value.to_s}'"
+          label_options << "label#{key.to_s.capitalize}:'#{escape_js_string(value.to_s)}'"
         end
       end
       script << "#{@name} = new MarkerWithLabel({map: null, position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: #{@draggable}, icon: #{@icon.name}, shadow: #{@icon.name}_shadow,#{label_options.join(',')}});\n"
@@ -102,5 +102,10 @@ class Cartographer::Gmarker
     "<a href='#' onClick='#{@map.dom_id}.setCenter(new GLatLng(#{@position.first}, #{@position.last}), 8); return false;'>#{link_text}</a>"
   end
 
-
+  def escape_js_string(str)
+    str.gsub(%r(\\|<\/|\r\n|[\n\r"'])) do |match|
+      { '\\'=>'\\\\', '</'=>'<\/', "\r\n"=>'\n', "\n"=>'\n',
+        "\r"=>'\n', '"'=>'\\"', "'"=>"\\'" } [match]
+    end
+  end
 end
