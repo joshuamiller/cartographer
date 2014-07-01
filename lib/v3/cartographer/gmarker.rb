@@ -1,6 +1,6 @@
 class Cartographer::Gmarker
   #include Reloadable
-  attr_accessor :name, :marker_type, :highlight, :icon, :position, :click, :info_window, :info_window_url, :map, :min_zoom, :max_zoom, :dblclick, :draggable
+  attr_accessor :name, :marker_type, :highlight, :icon, :position, :click, :info_window, :info_window_url, :map, :min_zoom, :max_zoom, :dblclick, :draggable, :label
 
   def initialize(options = {})
     @name = options[:name] || "marker"
@@ -14,6 +14,7 @@ class Cartographer::Gmarker
     @map = options[:map]
     @highlight = options[:highlight] || false
     @draggable = options[:draggable] || false
+    @label = options[:label] || nil
   
     # inherit our 'debug' settings from the map, if there is one, and it's in debug
     # you can also just debug this marker, if you like, or debug the map and
@@ -35,6 +36,7 @@ class Cartographer::Gmarker
     script = []
     return if @info_window_url
     if @info_window.kind_of?Array
+      # this probably won't work with API v3 since it does not support tabs.
       script << "  var #{@name}_infoTabs = ["
       script << @info_window.inject([]) { |tabs,tab|
         tabs << "   new GInfoWindowTab(\"#{tab[:title]}\",\"#{tab[:html]}\")"
@@ -44,9 +46,14 @@ class Cartographer::Gmarker
   #{@name}.openInfoWindowTabsHtml(#{@name}_infoTabs);
 }\n"
     else        
+      # using API V3 of infowindow (PG)
+      script << "var #{@name}_infowindow = new google.maps.InfoWindow({
+          content: \"#{escape_javascript(@info_window)}\"
+      });"
+
       script << "function #{@name}_infowindow_function(){
-  #{@name}.openInfoWindowHtml(\"#{@info_window}\")
-}\n"
+        #{@name}_infowindow.open(#{@map.dom_id},#{@name});
+      }\n"
     end
   end
 
@@ -55,7 +62,19 @@ class Cartographer::Gmarker
     marker_clusterer = marker_clusterer_flag
     script = []
     script << "// Set up the pre-defined marker" if @debug
-    script << "#{@name} = new google.maps.Marker({map: null, position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: #{@draggable}, icon: #{@icon.name}, shadow: #{@icon.name}_shadow}); \n"
+    if @label
+      label_options = []
+      @label.each do |key, value|
+        if :anchor == key
+          label_options << "label#{key.to_s.capitalize}:#{value.to_s}"
+        else
+          label_options << "label#{key.to_s.capitalize}:'#{value.to_s}'"
+        end
+      end
+      script << "#{@name} = new MarkerWithLabel({map: null, position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: #{@draggable}, icon: #{@icon.name}, #{@icon.flat ? 'flat: true' : "shadow: #{@icon.name}_shadow"},#{label_options.join(',')}});\n"
+    else
+      script << "#{@name} = new google.maps.Marker({map: null, position: new google.maps.LatLng(#{@position[0]}, #{@position[1]}), draggable: #{@draggable}, icon: #{@icon.name}, #{@icon.flat ? 'flat: true' : "shadow: #{@icon.name}_shadow"}}); \n"
+    end
 
     if @click
       script << "// Create the listener for your custom click event" if @debug
@@ -88,6 +107,10 @@ class Cartographer::Gmarker
   def zoom_link(link_text = 'Zoom on map')
     "<a href='#' onClick='#{@map.dom_id}.setCenter(new GLatLng(#{@position.first}, #{@position.last}), 8); return false;'>#{link_text}</a>"
   end
-
+  
+  #Escape string to be used in JavaScript. Lifted from rails.
+  def escape_javascript(javascript)
+    javascript.gsub(/\r\n|\n|\r/, "\\n").gsub("\"") { |m| "\\#{m}" }
+  end
 
 end
