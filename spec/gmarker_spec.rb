@@ -46,6 +46,16 @@ describe Cartographer::Gmarker do
 
   end
 
+  it "should accept configuration for dragend event" do
+    marker = Cartographer::Gmarker.new(:name=> "org11", :marker_type => "Organization",
+              :position => [ 36.031332, -21.093750],
+              :drag_end => "alert(\"DragEnd Works!\");",
+              :icon => @icon,
+              :map=>@map)
+    marker.to_js().should include("google.maps.event.addListener(org11, 'dragend', function(mouseEvent) {alert(\"DragEnd Works!\");});")
+
+  end
+
   it "should accept configuration for info window url" do
     marker = Cartographer::Gmarker.new(:name=> "org11", :marker_type => "Organization",
               :position => [ 36.031332, -21.093750],

@@ -1,6 +1,6 @@
 class Cartographer::Gmarker
   #include Reloadable
-  attr_accessor :name, :marker_type, :highlight, :icon, :position, :click, :info_window, :info_window_url, :map, :min_zoom, :max_zoom, :dblclick, :draggable
+  attr_accessor :name, :marker_type, :highlight, :icon, :position, :click, :info_window, :info_window_url, :map, :min_zoom, :max_zoom, :dblclick, :draggable, :drag_end
 
   def initialize(options = {})
     @name = options[:name] || "marker"
@@ -9,6 +9,7 @@ class Cartographer::Gmarker
     @icon = options[:icon] || Cartographer::Gicon.new
     @click = options[:click] # javascript to execute on click
     @dblclick = options[:dblclick] # javascript to execute on double click
+    @drag_end = options[:drag_end] # javascript to execute on dragend event
     @info_window = options[:info_window] # html to pop up on click
     @info_window_url = options[:info_window_url] # html to pop up on click fetched from a URL
     @map = options[:map]
@@ -73,6 +74,10 @@ class Cartographer::Gmarker
 
     if @dblclick
       script << "google.maps.event.addListener(#{name}, 'dblclick', function() {#{@dblclick}});\n"
+    end
+
+    if @drag_end
+      script << "google.maps.event.addListener(#{name}, 'dragend', function(mouseEvent) {#{@drag_end}});\n"
     end
 
     script << "  // Add the marker to a new overlay on the map" if @debug
