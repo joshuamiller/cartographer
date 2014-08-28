@@ -56,4 +56,12 @@ describe Cartographer::Gmarker do
 
   end
 
+  it 'accepts label parameter' do
+    marker = Cartographer::Gmarker.new(:name=> "org11", :marker_type => "Organization",
+              :position => [ 36.031332, -21.093750],
+              :label => { :content => 'Marker label' },
+              :icon => @icon,
+              :map=>@map)
+    marker.to_js().should include("labelContent:'Marker label'")
+  end
 end
